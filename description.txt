@@ -1,0 +1,17 @@
+[c/3ABC7A:Description:]
+Flexible body made out of living steel. Race of an researchers and explorers, protectors and guardians.
+They are not fit to harm, but harming them - is a bad idea.
+
+Requires MrPlague's Authentic Races to work.
+[c/3ABC7A:Races:]
+-Steel
+
+[c/3ABC7A:Credits:]
+-SM (Steel race creator)
+
+[c/3ABC7A:Original mod:]
+-MrPlague (spriter, animator, and coder)
+-CrocWithShades (betatester)
+-Dragons Tired (betatester)
+-Blaquestone (gameplay balance)
+-Fallout_Patriot (gameplay balance, betatester)
