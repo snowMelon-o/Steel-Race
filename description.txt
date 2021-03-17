@@ -2,7 +2,9 @@
 Flexible body made out of living steel. Race of an researchers and explorers, protectors and guardians.
 They are not fit to harm, but harming them - is a bad idea.
 
-Requires MrPlague's Authentic Races to work.
+-All of the upcoming updates will be purely for balance purpose.
+-Requires MrPlague's Authentic Races to work.
+
 [c/3ABC7A:Races:]
 -Steel
 
