@@ -53,16 +53,16 @@ namespace SteelsRace.Common.Races.Steels
 		public override bool DarkenEnvironment => true;
 
 		//stat info for the UI's stat display. 34EB93 is the green text, FF4F64 is the red text
-		public override string RaceHealthDisplayText => "[c/34EB93:+25%]";
-		public override string RaceRegenerationDisplayText => "[c/34EB93:+7%]";
-		public override string RaceManaDisplayText => "[c/FF4F64:-45%]";
+		public override string RaceHealthDisplayText => "[c/34EB93:+50%]";
+		public override string RaceRegenerationDisplayText => "[c/34EB93:+HP%]";
+		public override string RaceManaDisplayText => "[c/FF4F64:-25]";
 		public override string RaceDefenseDisplayText => "[c/34EB93:+10]";
-		public override string RaceDamageReductionDisplayText => "[c/34EB93:+25%]";
+		public override string RaceDamageReductionDisplayText => "[c/34EB93:+15%]";
 		public override string RaceThornsDisplayText => "[c/34EB93:HP%]";
-		public override string RaceLavaResistanceDisplayText => "[c/34EB93:+60]";
-		public override string RaceRangedDamageDisplayText => "[c/FF4F64:-35%]";
-        public override string RaceMagicDamageDisplayText => "[c/FF4F64:-35%]";
-        public override string RaceSummonDamageDisplayText => "[c/FF4F64:-50%]";
+		public override string RaceLavaResistanceDisplayText => "[c/34EB93:+2s]";
+		public override string RaceRangedDamageDisplayText => "[c/FF4F64:-30%]";
+        public override string RaceMagicDamageDisplayText => "[c/FF4F64:-30%]";
+        public override string RaceSummonDamageDisplayText => "[c/FF4F64:-40%]";
         public override string RaceMovementSpeedDisplayText => "[c/34EB93:+10%]";
 		public override string RaceJumpSpeedDisplayText => "[c/34EB93:+30%]";
 		public override string RaceFallDamageResistanceDisplayText => "[c/34EB93:+20]";
@@ -95,7 +95,7 @@ namespace SteelsRace.Common.Races.Steels
 			var modPlayer = player.GetModPlayer<MrPlagueRaces.MrPlagueRacesPlayer>();
 			if (modPlayer.RaceStats)
 			{
-				player.statLife += 25;
+				player.statLife += 50;
 			}
 		}
 
@@ -106,16 +106,16 @@ namespace SteelsRace.Common.Races.Steels
             var modPlayer = player.GetModPlayer<MrPlagueRaces.MrPlagueRacesPlayer>();
             if (modPlayer.RaceStats)
             {
-                player.statLifeMax2 += (player.statLifeMax2 / 4);
-                player.lifeRegen += 1 + (player.statLifeMax2 / 15);
-                player.statManaMax2 -= 45;
-                player.statDefense += 10;
-                player.endurance += 0.25f;
-                player.thorns += player.statLifeMax2 / 170f;
+                player.statLifeMax2 += (player.statLifeMax2 / 2);
+                player.lifeRegen += 1 + (player.statLifeMax2 / 30);
+                player.statManaMax2 -= 25;
+                player.statDefense += 9;
+                player.statDefense += player.statLifeMax2 / 100;
+                player.endurance += 0.15f;
                 player.lavaMax += 60;
-                player.rangedDamage -= 0.35f;
-                player.magicDamage -= 0.35f;
-                player.minionDamage -= 0.5f;
+                player.rangedDamage -= 0.3f;
+                player.magicDamage -= 0.3f;
+                player.minionDamage -= 0.4f;
                 player.moveSpeed += 0.1f;
                 player.jumpSpeedBoost += 0.3f;
                 player.extraFall += 20;
@@ -133,8 +133,8 @@ namespace SteelsRace.Common.Races.Steels
                 player.fireWalk = true;
                 if (player.velocity.Y == 0f && player.velocity.X == 0f)
                 {
-                    player.lifeRegen += (player.statLifeMax2 / 10);
-                    player.endurance -= 0.10f;
+                    player.lifeRegen += (player.statLifeMax2 / 30);
+                    player.endurance -= 0.15f;
                     player.buffImmune[24] = true;
                     player.buffImmune[39] = true;
                     player.buffImmune[153] = true;
@@ -142,19 +142,26 @@ namespace SteelsRace.Common.Races.Steels
                 }
                 if (player.velocity.Y == 0f && player.velocity.X == 0f && player.statLife <= (player.statLifeMax2 * 0.5))
                 {
-                    player.lifeRegen += (player.statLifeMax2 / 15);
+                    player.lifeRegen += (player.statLifeMax2 / 35);
+                    player.endurance += 0.05f;
                 }
                 if (player.statLife <= (player.statLifeMax2 * 0.5))
                 {
-                    player.lifeRegen += (player.statLifeMax2 / 15);
-                    player.buffImmune[24] = true;
-                    player.buffImmune[39] = true;
-                    player.buffImmune[153] = true;
-                    player.buffImmune[67] = true;
+                    player.lifeRegen += (player.statLifeMax2 / 40);
                 }
-                if (player.statLifeMax2 >= 500)
+                if (player.statLife <= (player.statLifeMax2 * 0.3))
                 {
-                    player.thorns = 3f;
+                    player.lifeRegen += (player.statLifeMax2 / 60);
+                    player.longInvince = true;
+                    player.allDamage += 0.1f;
+                }
+                if (player.statLifeMax2 >= 750)
+                {
+                    player.thorns += 2f;
+                }
+                if (player.statLifeMax2 < 750)
+                {
+                    player.thorns += player.statLifeMax2 / 380f;
                 }
             }
         }
@@ -196,11 +203,8 @@ namespace SteelsRace.Common.Races.Steels
                 player.buffImmune[20] = true;
                 player.buffImmune[70] = true;
                 player.buffImmune[30] = true;
+                player.buffImmune[68] = true;
                 player.breath = 300;
-                player.buffImmune[24] = true;
-                player.buffImmune[39] = true;
-                player.buffImmune[153] = true;
-                player.buffImmune[67] = true;
             }
         }
 
