@@ -36,18 +36,18 @@ namespace SteelsRace.Common.Races.Steels
         public override string RaceLore2 => "Their original appearance" + "\nis unknown, but it is known" + "\nthat their changes were made by" + "\nsome kind of virus they made.";
 		//"\n" is normally used to move to the next line, but it conflicts with colored text so I split the ability and additional notes into several lines
 		public override string RaceAbilityName => "Living Metal";
-		public override string RaceAbilityDescription1 => "Regenerate health faster when not moving, but lowers Damage Resistance.";
+		public override string RaceAbilityDescription1 => "Increased health regeneration rate while standing still, but reduced Damage Resistance.";
 		public override string RaceAbilityDescription2 => "";
 		public override string RaceAbilityDescription3 => "";
 		public override string RaceAbilityDescription4 => "";
 		public override string RaceAbilityDescription5 => "";
         public override string RaceAbilityDescription6 => "";
 		public override string RaceAdditionalNotesDescription1 => "-Unique hairstyles";
-		public override string RaceAdditionalNotesDescription2 => "-Immune to [c/34EB93:Poison], [c/34EB93:Venom], [c/34EB93:Bleeding] and [c/34EB93:Suffocation]";
-		public override string RaceAdditionalNotesDescription3 => "-Can't drown";
+		public override string RaceAdditionalNotesDescription2 => "-Immune to life-draining debuffs";
+		public override string RaceAdditionalNotesDescription3 => "-Can't drown, takes no knockback";
 		public override string RaceAdditionalNotesDescription4 => "-Thorns ability, more max hp = more thorns damage multiplier";
 		public override string RaceAdditionalNotesDescription5 => "-Regenerates faster while standing still. Immune to fireblocks";
-        public override string RaceAdditionalNotesDescription6 => "-Takes no knockback";
+        public override string RaceAdditionalNotesDescription6 => "-Damage and speed increase with decreasing health";
 
 		//makes the race's display background in the UI appear darker, can be used to make it look like it is night
 		public override bool DarkenEnvironment => true;
@@ -57,7 +57,7 @@ namespace SteelsRace.Common.Races.Steels
 		public override string RaceRegenerationDisplayText => "[c/34EB93:+HP%]";
 		public override string RaceManaDisplayText => "[c/FF4F64:-25]";
 		public override string RaceDefenseDisplayText => "[c/34EB93:+10]";
-		public override string RaceDamageReductionDisplayText => "[c/34EB93:+15%]";
+		public override string RaceDamageReductionDisplayText => "[c/34EB93:+20%]";
 		public override string RaceThornsDisplayText => "[c/34EB93:HP%]";
 		public override string RaceLavaResistanceDisplayText => "[c/34EB93:+2s]";
 		public override string RaceRangedDamageDisplayText => "[c/FF4F64:-30%]";
@@ -107,11 +107,11 @@ namespace SteelsRace.Common.Races.Steels
             if (modPlayer.RaceStats)
             {
                 player.statLifeMax2 += (player.statLifeMax2 / 2);
-                player.lifeRegen += 1 + (player.statLifeMax2 / 30);
+                player.lifeRegen += 1 + (player.statLifeMax2 / 40);
                 player.statManaMax2 -= 25;
                 player.statDefense += 9;
                 player.statDefense += player.statLifeMax2 / 100;
-                player.endurance += 0.15f;
+                player.endurance += 0.2f;
                 player.lavaMax += 60;
                 player.rangedDamage -= 0.3f;
                 player.magicDamage -= 0.3f;
@@ -133,27 +133,28 @@ namespace SteelsRace.Common.Races.Steels
                 player.fireWalk = true;
                 if (player.velocity.Y == 0f && player.velocity.X == 0f)
                 {
-                    player.lifeRegen += (player.statLifeMax2 / 30);
+                    player.lifeRegen += (player.statLifeMax2 / 60);
                     player.endurance -= 0.15f;
-                    player.buffImmune[24] = true;
-                    player.buffImmune[39] = true;
-                    player.buffImmune[153] = true;
-                    player.buffImmune[67] = true;
-                }
-                if (player.velocity.Y == 0f && player.velocity.X == 0f && player.statLife <= (player.statLifeMax2 * 0.5))
-                {
-                    player.lifeRegen += (player.statLifeMax2 / 35);
-                    player.endurance += 0.05f;
                 }
                 if (player.statLife <= (player.statLifeMax2 * 0.5))
                 {
-                    player.lifeRegen += (player.statLifeMax2 / 40);
+                    player.allDamage += 0.05f;
+                    player.runAcceleration += 0.05f;
                 }
                 if (player.statLife <= (player.statLifeMax2 * 0.3))
                 {
-                    player.lifeRegen += (player.statLifeMax2 / 60);
+                    player.lifeRegen += (player.statLifeMax2 / 120);
                     player.longInvince = true;
                     player.allDamage += 0.1f;
+                    player.maxRunSpeed += 0.05f;
+                    if (player.statLifeMax2 < 750)
+                    {
+                        player.thorns += player.statLifeMax2 / 380f;
+                    }
+                    if (player.statLifeMax2 >= 750)
+                    {
+                        player.thorns += 2f;
+                    }
                 }
                 if (player.statLifeMax2 >= 750)
                 {
@@ -162,6 +163,12 @@ namespace SteelsRace.Common.Races.Steels
                 if (player.statLifeMax2 < 750)
                 {
                     player.thorns += player.statLifeMax2 / 380f;
+                }
+                if (player.lifeRegenCount <= 0)
+                {
+                    player.lifeRegenCount = 60;
+                    player.lifeRegenTime = 60;
+                    player.statLife += player.statLifeMax2 / 350;
                 }
             }
         }
